@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .kp {
+            height: 25px;
+            width: 25px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="keypoints-container"></div>
+        <img src="">
+    </div>
+    <script>
+        let g_frame = 401;
+
+        document.addEventListener('keyup', (_d, e)=>{
+            e = e || window.event;
+
+            if (e.keyCode == '38') {
+                // up arrow
+            }
+            else if (e.keyCode == '40') {
+                // down arrow
+            }
+            else if (e.keyCode == '37') {
+                // left arrow
+                frameBackward();
+            }
+            else if (e.keyCode == '39') {
+                frameForward();
+            }
+        })
+
+        async function loadFrame(frame) {
+            g_frame = frame;
+
+            let img = document.querySelector('img');
+
+            img.src = `images/output_0${frame}.png`;
+
+            let resp = await fetch(`keypoints/dip_000000000${frame}_keypoints.json`);
+            let data = await resp.json();
+            console.log(data);
+
+            renderKeypoints(data);
+        }
+
+        function renderKeypoints(data) {
+            if (data.people.length == 0) return;
+            let kps = data.people[0].pose_keypoints_2d;
+
+            let keypointsContainer = document.querySelector('#keypoints-container');
+            keypointsContainer.innerHTML = "";
+
+            for (let i = 0; i < kps.length ; i+= 3) {
+                let [x, y, c] = kps.slice(i, i+3);
+                let point = document.createElement('div');
+                point.classList = "kp";
+                point.style.left = `${x}px`;
+                point.style.top = `${y}px`;
+                keypointsContainer.appendChild(point);
+            }
+            
+
+        }
+
+let frameStep = 15;
+        loadFrame(401);
+
+        function frameForward() {
+            loadFrame(g_frame+frameStep);
+        }
+
+        function frameBackward() {
+            loadFrame(g_frame-frameStep);
+        }
+
+    </script>
+</body>
+</html>

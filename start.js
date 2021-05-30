@@ -10,11 +10,15 @@ const q = require('queue')({
     concurrency: 1
 })
 
-const DATA_DIR = path.join(__dirname, 'data');
+const DATA_DIR = path.join("R:", 'data');
 const OP_WORKDIR = path.join(__dirname, 'openpose');
 const OPBIN = path.join(__dirname, 'openpose', 'bin', 'OpenPoseDemo.exe');
 
-const process = (path) => (callback) => {
+const DEFAULT_OPTIONS = {
+    autodelete: true
+}
+
+const process = (path, options=DEFAULT_OPTIONS) => (callback) => {
     fs.readFile(path, (err, data) => {
         if (err) {
             console.error(err.stack)
@@ -25,6 +29,7 @@ const process = (path) => (callback) => {
                 console.error(err.stack)
                 return callback(err);
             }
+            if (!options.autodelete) return callback();
             fs.unlink(path, (err)=>{
                 if (err) {
                     console.error(err.stack)
@@ -43,6 +48,8 @@ q.on('error', (err) =>{
 })
 chokidar.watch(DATA_DIR).on('all', (event, path) => {
     if (event == "add")
-        q.push(process(path))
+        q.push(process(path, { autodelete: false }))
 });
-spawn(OPBIN, ['--write_json', DATA_DIR], { cwd: OP_WORKDIR, stdio: 'inherit' });
+//spawn(OPBIN, ['--write_json', DATA_DIR], { cwd: OP_WORKDIR, stdio: 'inherit' });
+// spawn(OPBIN, ['--help'], { cwd: OP_WORKDIR, stdio: 'inherit' });
+spawn(OPBIN, ['--video', __dirname+'\\video\\dip.mp4', '--write_json', DATA_DIR], { cwd: OP_WORKDIR, stdio: 'inherit' });

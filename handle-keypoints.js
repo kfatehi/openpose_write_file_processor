@@ -8,8 +8,9 @@ module.exports = function(keypointsContainer, callback) {
     let rightShoulder = {x:kp[2],y:kp[2+1]}
     let rightElbow = {x:kp[3],y:kp[3+1]}
     
+    console.log({leftShoulderElbowDiffY: leftElbow.y - leftShoulder.y});
     console.log({
-        leftShoulderElbowDiffY: leftElbow.y - leftShoulder.y
+        rightShoulderElbowDiffY: rightElbow.y - rightShoulder.y,
     })
  
     callback();

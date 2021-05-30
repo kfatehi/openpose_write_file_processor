@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "chokidar": "^3.5.1",
+    "express": "^4.17.1",
     "mkdirp": "^1.0.4",
     "queue": "^6.0.2",
     "rimraf": "^3.0.2"
