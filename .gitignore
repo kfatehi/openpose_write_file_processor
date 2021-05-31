@@ -3,5 +3,4 @@ keypoints
 images
 video
 openpose
-public/images
-public/keypoints
+dist

@@ -4,7 +4,7 @@ const mkdirp = require('mkdirp');
 const rimraf = require('rimraf');
 const path = require('path');
 const fs = require('fs');
-const handleKeypoints = require('./handle-keypoints');
+const handleKeypoints = require('./src/handle-keypoints');
 const q = require('queue')({
     autostart: true,
     concurrency: 1
